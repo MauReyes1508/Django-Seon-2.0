@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang=""> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Terceros</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static "css/modal.css" %}">
+    <link rel="website icon" type="icon" href="{% static 'images/Logo_Pacos.jpg' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <br><br><br><br>
+
+    <form method="POST" action="{% url 'editar_tercero' tercero.codter %}">
+        {% csrf_token %}
+        <div class="container">
+            <!-- Contenedor padre con diseño flex -->
+            <div class="row">
+                <!-- IDENTIFICACIÓN -->
+                <div class="section-container">
+                    <div class="section">
+                        <h1 class="title">IDENTIFICACIÓN</h1><br>
+                        <div class="form-group">
+                            <div>
+                                <label for="id_codter">Código:</label>
+                                {{ form.codter }}
+                            </div>
+                            <div>
+                                <label>Nombres:</label>
+                                {{ form.nomter }}
+                            </div>
+                            <div>
+                                <label>Apellido 1/Empresa:</label>
+                                {{ form.papter }}
+                            </div>
+                            <div>
+                                <label>Apellido 2:</label>
+                                {{ form.sapter }}
+                            </div>
+                            <div>
+                                <label>Nombre Comercial:</label>
+                                {{ form.nomcter }}
+                            </div>
+                            <div>
+                                <label for="id_nitter">Documento/Nit:</label>
+                                {{ form.nitter }}
+                            </div>                            
+                            <div>
+                                <label>Tipo Persona:</label>
+                                {{ form.tipper }}
+                            </div>
+                            <div>
+                                <label for="id_tipnit">Tipo Documento:</label>
+                                {{ form.tipnit }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- IDENTIFICACIÓN - 2 -->
+                <div class="section-container">
+                    <div class="section">
+                        <h1 class="title">IDENTIFICACIÓN - 2</h1><br>
+                        <div class="form-group">
+                            <div>
+                                <label>Tipo de Tercero:</label>
+                                {{ form.tipter }}
+                            </div>
+                            <div>
+                                <label>Régimen Simplificado:</label>
+                                {{ form.regimen_sim }}
+                            </div>
+                            <div>
+                                <label>Exento de IVA:</label>
+                                {{ form.excen_iva }}
+                            </div>
+                            <div>
+                                <label>Contacto:</label>
+                                {{ form.contacto }}
+                            </div>
+                            <div>
+                                <label>Cargo:</label>
+                                {{ form.cgo_contac }}
+                            </div>
+                            <div>
+                                <label>Barrio:</label>
+                                {{ form.barrio }}
+                            </div>
+                            <div class="form-group">
+                                <label>Lista Base:</label>
+                                {{ form.lista_base }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- UBICACIÓN -->
+                <div class="section-container">
+                    <div class="section">
+                        <h1 class="title">UBICACIÓN</h1><br>
+                        <div class="form-group">
+                            <div>
+                                <label>País:</label>
+                                {{ form.paister }}
+                            </div>
+                            <div>
+                                <label>Ciudad:</label>
+                                {{ form.ciuter }}
+                            </div>
+                            <div>
+                                <label>Dirección:</label>
+                                {{ form.dirter }}
+                            </div>
+                            <div>
+                                <label>Teléfonos:</label>
+                                {{ form.telter }}
+
+                            </div>
+                            <div>
+                                <label>Móvil:</label>
+                                {{ form.celter }}
+                            </div>
+                            <div>
+                                <label>Email:</label>
+                                {{ form.direle }}
+                            </div>
+                            <div>
+                                <label>Localidad/Comuna:</label>
+                                {{ form.localidad }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- OTROS -->
+                <div class="section-container">
+                    <div class="section">
+                        <h1 class="title">OTROS</h1><br>
+                        <div class="form-group">
+                            <div>
+                                <label>Plazo en Días:</label>
+                                {{ form.plazofac }}
+                            </div>
+                            <div>
+                                <label>Vendedor:</label>
+                                {{ form.vendedor }}
+                            </div>
+                            <div>
+                                <label>Cuenta de Banco:</label>
+                                {{ form.cta_banco }}
+                            </div>
+                            <div>
+                                <label>Código de Banco:</label>
+                                {{ form.cod_banco }}
+                            </div>
+                            <div>
+                                <label>Tipo de Cuenta:</label>
+                                {{ form.tipo_cta }}
+                            </div>
+                            <div>
+                                <label>Categoría:</label>
+                                {{ form.categoria }}
+                            </div>
+                            <div>
+                                <label>Remitido Por:</label>
+                                {{ form.ter_origen }}
+                            </div>
+                            <div>
+                                <label></label>
+                                {{ form.des_origen }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-container">
+                <div class="section">
+                    <h1 class="title">FINANCIEROS/FECHAS</h1><br>
+                    <div class="form-group financieros">
+                        <!-- Primera columna -->
+                        <div class="column">
+                            <div>
+                                <label class="label1">Cupo Aprobado:</label>
+                                {{ form.cuptot }}
+                            </div>
+                            <div>
+                                <label class="label1">Cupo Disponible:</label>
+                                {{ form.saldocup }}
+                            </div>
+                            <div class="descuento">
+                                <label>Descuento:</label>
+                                {{ form.descuento }}
+                            </div>
+                            <div class="zona">
+                                <label>Zona:</label>
+                                {{ form.zonater }}
+                            </div>
+                            <div class="fecha2">
+                                <label>Fecha Creación:</label>
+                                {{ form.fecha_ini }}
+                            </div>
+
+                        </div>
+            
+                        <!-- Segunda columna: Retenciones -->
+                        <div class="column retenciones-container">
+                            <div class="retencion-row">
+                                <label>Retención Fuente:</label>
+                                {{ form.base_ret_fte }}
+                                {{ form.retfuente }}
+                            </div>
+                            <div class="retencion-row">
+                                <label>Retención I.C.A:</label>
+                                {{ form.base_ret_ica }}
+                                {{ form.retica }}
+                            </div>
+                            <div class="retencion-row">
+                                <label>Retención I.V.A:</label>
+                                {{ form.base_ret_iva }}
+                                {{ form.retiva }}
+                            </div>
+                            <div class="fecha">
+                                <label>Fecha Última Venta:</label>
+                                {{ form.fecha_fin }}
+                            </div>
+                        </div>
+                        <div>
+                            <label>Observaciones:</label>
+                            {{ form.observa }}
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div><br><br>
+        <div class="align-center">
+            <button id="abrirModal" type="button" class="btn-modal">🔎</button>
+            <button type="submit" class="btn-primary">Guardar Cambios</button>
+            <a href="{% url 'registro_terceros' %}"><button type="button"><img class="btn-back" src="{% static 'images/hacia-atras.png' %}"></button></a>
+            <a href="#" onclick="eliminarTercero('{{ tercero.codter }}')" class="btn btn-danger">Eliminar</a>
+        </div>
+
+        <!-- Ventana Alerta -->
+        <div id="alertModal" class="modal" style="display: {% if form.errors %}block{% else %}none{% endif %};">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h4>Se encontraron los siguientes errores:</h4>
+                <ul id="errorList">
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <li>
+                                <strong>{{ field.label }}:</strong>
+                                <div style="margin-top: 5px; margin-bottom: 10px;">
+                                    {% for error in field.errors %}
+                                        <span style="color: red;">{{ error }}</span><br>
+                                    {% endfor %}
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    <!-- Modal de Búsqueda -->
+    <div id="miModal" class="modal">
+        <div class="modal-contenido">
+            <span id="cerrarModal" class="cerrar">&times;</span>
+            <h2>Buscar Terceros</h2>
+            {{ if }}
+            <!-- Barra de búsqueda -->
+            <input type="text" id="barraBusqueda" class="barra-busqueda" placeholder="Buscar por nombre, código, etc." autocomplete="off" onfocus="selectText(this)">
+            
+            <!-- Botón de búsqueda -->
+            <button id="btnBuscar" class="btn-buscar">Buscar</button>
+            
+            <!-- Tabla de resultados -->
+            <table id="resultadoBusqueda" class="tabla-resultados">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nit/Cédula</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Nombre Comercial</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Los resultados de búsqueda -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tipperField = document.getElementById("id_tipper");
+            const tipnitField = document.getElementById("id_tipnit");
+        
+            if (tipperField && tipnitField) {
+                function actualizarOpciones() {
+                    const tipoPersona = tipperField.value;
+                    console.log(`DEBUG: Tipo de persona seleccionado: ${tipoPersona}`);
+                
+                    // Limpiar opciones existentes
+                    while (tipnitField.firstChild) {
+                        tipnitField.removeChild(tipnitField.firstChild);
+                    }
+                
+                    // Agregar opciones dinámicas
+                    let opciones = [];
+                    if (tipoPersona === "0") { // Persona Natural
+                        opciones = [
+                            { value: "0", text: "Cédula de Ciudadanía" },
+                            { value: "3", text: "Tarjeta de Identidad" },
+                            { value: "4", text: "Registro Civil" },
+                            { value: "2", text: "Pasaporte" },
+                        ];
+                    } else if (tipoPersona === "1") { // Persona Jurídica
+                        opciones = [
+                            { value: "1", text: "NIT" },
+                        ];
+                    }
+                
+                    console.log("DEBUG: Opciones generadas:", opciones);
+                
+                    // Agregar opciones dinámicamente
+                    opciones.forEach(opcion => {
+                        const optionElement = document.createElement("option");
+                        optionElement.value = opcion.value;
+                        optionElement.textContent = opcion.text;
+                        tipnitField.appendChild(optionElement);
+                    });
+                
+                    // Seleccionar el valor actual de tipnit
+                    const valorActual = tipnitField.getAttribute('data-initial-value');
+                    if (valorActual) {
+                        tipnitField.value = valorActual;
+                        console.log(`DEBUG: Se seleccionó la opción: ${tipnitField.value}`);
+                    } else {
+                        console.log("DEBUG: No se encontró un valor inicial para tipnit.");
+                    }
+                }
+
+                
+        
+                // Inicializar las opciones al cargar la página
+                tipnitField.setAttribute("data-initial-value", tipnitField.value);
+                actualizarOpciones();
+        
+                // Actualizar opciones al cambiar el tipo de persona
+                tipperField.addEventListener("change", actualizarOpciones);
+            }
+        });
+        
+        
+        
+        // Función para seleccionar el texto del campo
+        function selectText(element) {
+            element.select();
+        }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const modal = document.getElementById('alertModal');
+                const closeButton = document.querySelector('.close-button');
+        
+                // Mostrar el modal si hay errores
+                {% if form.errors %}
+                    modal.style.display = 'block';
+                {% endif %}
+        
+                // Cerrar el modal al hacer clic en el botón de cerrar
+                closeButton.addEventListener('click', function () {
+                    modal.style.display = 'none';
+                });
+        
+                // Cerrar el modal al hacer clic fuera de la ventana
+                window.addEventListener('click', function (event) {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            });
+        
+                    // Obtener elementos del DOM
+                    let modal = document.getElementById("miModal");     
+                    let abrirModalBtn = document.getElementById("abrirModal");
+                    let cerrarModalBtn = document.getElementById("cerrarModal");
+                    let barraBusqueda = document.getElementById("barraBusqueda");
+                    let resultadoBusqueda = document.getElementById("resultadoBusqueda");
+        
+                   // Abrir modal
+                    document.getElementById("abrirModal").addEventListener("click", function () {
+                        document.getElementById("miModal").style.display = "block";
+                    });
+                
+                    
+                    // Cerrar modal
+                    document.getElementById("cerrarModal").addEventListener("click", function() {
+                        document.getElementById("miModal").style.display = "none";
+                    });
+                    
+                    // Búsqueda de datos al hacer clic en el botón de búsqueda
+                    document.getElementById("btnBuscar").addEventListener("click", function() {
+                        let query = document.getElementById("barraBusqueda").value;
+                    
+                        if (query.trim() !== "") {
+                        // Enviar solicitud AJAX para buscar los datos
+                        $.ajax({
+                            url: "{% url 'lista_terceros' %}",
+                            data: { 'query': query },
+                            success: function(data) {
+                            let resultados = data.resultados;
+                            mostrarResultados(resultados);
+                            },
+                            error: function() {
+                            alert("Hubo un error al realizar la búsqueda.");
+                            }
+                        });
+                        } else {
+                        alert("Por favor ingrese un término de búsqueda.");
+                        }
+                    });
+                    
+                    // Mostrar los resultados de la búsqueda en la ventana modal
+                    function mostrarResultados(resultados) {
+                        let listaResultados = document.getElementById("resultadoBusqueda");
+                        listaResultados.innerHTML = "";
+                    
+                        if (resultados.length > 0) {
+                        resultados.forEach(function(tercero) {
+                            let li = document.createElement("li");
+                            li.textContent = `${tercero.codter} - ${tercero.nomter}`;
+                            listaResultados.appendChild(li);
+                        });
+                        } else {
+                        listaResultados.innerHTML = "<li>No se encontraron resultados.</li>";
+                        }
+                    }
+                    $(document).ready(function() {
+                // Detectar cuando el usuario escribe en la barra de búsqueda
+                $('#barraBusqueda').on('input', function() {
+                    let query = $(this).val();
+        
+                    // Realizar la búsqueda solo si hay texto
+                    if (query.length > 0) {
+                        $.ajax({
+                            url: '{% url "lista_terceros" %}', 
+                            data: {
+                                'query': query
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                let resultados = response.resultados;
+                                let html = '';
+        
+                                if (resultados.length > 0) {
+                                    resultados.forEach(function(tercero) {
+                                        html += `
+                                            <tr>
+                                                <td>${tercero.codter}</td>
+                                                <td>${tercero.nitter}</td>
+                                                <td>${tercero.nomter || '/////////////////////'}</td>
+                                                <td>${tercero.papter || '//////////////////'}</td>
+                                                <td>${tercero.nomcter || '/////////////////////////////////////'}</td>
+                                                <td><a href="/editar_tercero/${tercero.codter}" class="btn-editar">Editar</a></td>
+                                            </tr>
+                                        `;
+                                    });
+                                } else {
+                                    html = '<tr><td colspan="5">No se encontraron resultados.</td></tr>';
+                                }
+        
+                                $('#resultadoBusqueda tbody').html(html);
+                            }
+                        });
+                    } else {
+                        $('#resultadoBusqueda tbody').html('');
+                    }
+                }); 
+        
+                // Limpiar la barra de búsqueda cuando el usuario haga clic en la "x"
+                $('#cerrarModal').on('click', function() {
+                    $('#barraBusqueda').val('');
+                    $('#resultadoBusqueda tbody').html('');
+                });
+        
+                // Cerrar el modal si el usuario hace clic fuera del contenido
+                $(window).on('click', function(event) {
+                    if (event.target == document.getElementById("miModal")) {
+                        $('#miModal').hide();
+                    }
+                });
+        
+                // Accionar el botón de editar
+                $(document).on('click', '.btn-editar', function() {
+                    let codter = $(this).data('id');
+                });
+            });
+                    // Función seleccionar el texto del campo
+                    function selectText(element) {
+                        element.select();
+                    }
+
+                    function eliminarTercero(codter) {
+                        if (!confirm('⚠️ Estás seguro de que deseas eliminar este tercero?')) {
+                            return;
+                        }
+                
+                        fetch(`/eliminar_tercero/${codter}/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}',
+                            },
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                alert('El tercero fue eliminado exitosamente.');
+                                window.location.href = '{% url "registro_terceros" %}';
+                            } else {
+                                return response.json().then(data => {
+                                    alert(data.message || 'Error al eliminar el tercero.');
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error al eliminar:', error);
+                            alert('Ocurrió un error al intentar eliminar el tercero.');
+                        });
+                    }
+    </script>
+</body>
+</html>

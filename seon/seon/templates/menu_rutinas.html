@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Rutinas</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+    <link rel="website icon" type="icon" href="{% static 'images/Logo_Pacos.jpg' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Bienvenido: {{ user.username }}, A La Plataforma WEB de Seon</h1>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="logout-btn">
+                    <span class="text">Cerrar Sesión</span>
+                    <span class="icon" aria-hidden="true">
+                      <img src="{% static 'images/cerrar-sesion.png' %}" alt="Cerrar sesión">
+                    </span>
+                  </button>                  
+            </form>
+        </div>
+    </header>
+    <main class="main-content">
+        <section class="routine-section">
+            <h2>Selecciona Una Rutina</h2>
+            <div class="routine-item">
+                <span>Registro de Terceros</span>
+                <a href="{% url 'registro_terceros' %}"><button class="routine-btn">Ir</button></a>
+            </div>
+            <div class="routine-item">
+                <span>Bascúla</span>
+                <a href="{% url 'bascula_view' %}"><button class="routine-btn">Ir</button></a>
+            </div>
+            <div class="routine-item">
+                <span>Rutina En Proceso</span>
+                <button class="routine-btn">Ir</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const button = document.querySelector('.logout-btn');
+        const text = button.querySelector('.text');
+        const icon = button.querySelector('.icon');
+
+        button.addEventListener('mouseover', () => {
+        text.style.opacity = 0;
+        icon.style.opacity = 1;
+        });
+
+        button.addEventListener('mouseout', () => {
+        text.style.opacity = 1;
+        icon.style.opacity = 0;
+        });
+
+    </script>
+</body>
+</html>

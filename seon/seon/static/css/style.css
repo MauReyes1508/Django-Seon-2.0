@@ -1,0 +1,294 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #d4d4d4;
+}
+
+.container {
+    max-width: 1270px;
+    margin: -69px auto;
+    padding: -1px;
+    background-color: white;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 20px;
+    gap: 1px;
+}
+
+.section-row {
+    display: flex;
+    width: 100%;
+    gap: 1px; 
+}
+
+.section-container {
+    flex: 1; 
+    min-width: 250px;
+    padding: 5px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Títulos */
+h1 {
+    font-size: 1rem;
+    color: #333;
+    border-bottom: 2px solid #0044cc;
+    padding-bottom: 5px;
+    margin-top: 1px;
+}
+
+.title {
+    font-size: 1rem;
+    color: #333;
+    border-bottom: 2px solid #22d3ee;
+    padding-bottom: 5px;
+    margin-top: 1px;
+}
+
+.form-group > div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.form-group label {
+    width: 120px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-right: 20px;
+    color: #333;
+}
+
+.form-group input, 
+.form-group select {
+    flex: 1;
+    padding: 3px;
+    font-size: 0.85rem;
+    border: 1px solid #ccc; 
+    border-radius: 4px;
+    box-sizing: border-box; 
+}
+
+textarea {
+    width: 300%;
+    height: 100px;
+    resize: none;
+    background-color: #e8ffe8;
+    border-radius: 4px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%; 
+    max-width: 200px; 
+    box-sizing: border-box; 
+}
+
+/* Contenedor principal */
+.financieros {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: -1px; 
+}
+
+
+.financieros div,
+.retenciones div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.financieros input,
+.retenciones input,
+.financieros select,
+.retenciones select {
+    padding: 5px;
+    font-size: 0.9rem;
+    width: 84px;
+}
+
+.zona {
+    position: relative;
+    left: 70px;
+}
+
+.zona input {
+    position: relative;
+    right: 100px;
+    width: 130px;
+}
+
+.descuento {
+    position: relative;
+    left: 80px;
+}
+
+.descuento input {
+    position: relative;
+    right: 50px;
+    width: 120px;
+}
+
+.fecha {
+    position: relative;
+    left: 20px;
+}
+
+.fecha input {
+    position: relative;
+    right: 40px;
+    width: 130px;
+
+}
+
+.fecha2 input {
+    position: relative;
+    right: 20px;
+    width: 130px;
+}
+
+.fecha2 {
+    position: relative;
+    right: 20px;
+}
+
+.financieros label,
+.retenciones label {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: left;
+    margin-right: 10px;
+}
+
+
+/* Botones */
+
+button {
+    display: inline-block;
+    margin: 10px 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.align-center {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.align-center button, 
+.align-center a button {
+    width: auto;
+    padding: 8px 20px;
+    background-color: #0369a1;
+    color: white;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.align-center button:hover {
+    background-color: #0284c7;
+}
+
+.align-center .btn-primary {
+    width: auto;
+    padding: 8px 20px;
+    background-color: #0ea5e9;
+    color: white;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.align-center .btn-primary:hover {
+    background-color: #38bdf8;
+}
+
+.align-center .btn-danger {
+    width: auto;
+    padding: 8px 20px;
+    background-color: #b91c1c;
+    color: white;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.align-center .btn-danger:hover{
+    background-color: #dc2626;
+}
+
+.align-center a button {
+    background-color: #555;
+}
+
+.align-center a button:hover {
+    background-color: #333;
+}
+
+.align-center .abrir-modal {
+    background-color: #555;
+}
+
+.align-center .abrir-modal:hover{
+    background-color: #333;
+}
+
+.align-center .btn-modal {
+    background-color: #555;
+}
+
+.align-center .btn-modal:hover{
+    background-color: #333;
+}
+ 
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.errors {
+    color: red;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Para Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+.btn-inicio {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    top: 14px;
+    transition: 0.3s all ease;
+}
+
+.btn-inicio:hover{
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 5px rgba(12, 12, 12, 0.974));
+}
+
+.btn-back{
+    width: 14px;
+    height: 14px;
+    text-align: center;
+}
+
+/* Diseño responsivo */
+@media (max-width: 700px) {
+    .financieros-grid,
+    .retenciones-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

@@ -1,0 +1,121 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ffa726, #ffa726, #ffcc80, #fde68a, #fef3c7, #ffedd5, #fafafa);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.login-container {
+    display: flex;
+    width: 80%;
+    max-width: 1000px;
+    height: 500px;
+    box-shadow: 20px -11px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.login-container .logo-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffa726;
+    position: relative;
+}
+
+.logo-section img {
+    max-width: 80%;
+    max-height: 80%;
+}
+
+.login-container .login-box {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #ffcc80;
+}
+
+.login-box h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: default;
+}
+
+.login-box form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-box form div {
+    margin-bottom: 15px;
+}
+
+.login-box form label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #6d4c41;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.login-box form input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #6d4c41;
+    outline: none;
+    font-size: 14px;
+}
+
+.login-box form input:focus {
+    border-color: #8d6e63;
+    box-shadow: 0 0 5px rgba(109, 76, 65, 0.5);
+}
+
+.login-box form button {
+    padding: 10px;
+    width: 105%;
+    border: none;
+    border-radius: 8px;
+    background-color: #ef6c00;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-box form button:hover {
+    background-color: #d84315;
+}
+
+.error-messages {
+    color: #d32f2f;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}

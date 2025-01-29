@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros Báscula</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/registros_bas.css' %}">
+    <link rel="website icon" type="icon" href="{% static 'images/Logo_Pacos.jpg' %}">
+</head>
+<body> 
+    <header>
+        <div class="home-icon-container">
+            <a href="{% url 'bascula_view' %}"><img class="home-icon" src="{% static 'images/regreso.png' %}"></a>
+        </div>
+        <h1>Registros de Pesaje</h1>
+        <div class="home-icon-container">
+            <a href="{% url 'menu_rutinas' %}"><img class="home-icon" src="{% static 'images/casa-de-perro.png' %}"></a>
+        </div>
+    </header>
+
+    <br><br>
+
+    <section>
+        <form method="get">
+            <input type="text" name="q" placeholder="Buscar por peso, dato o fecha" value="{{ query }}" onfocus="selectText(this)">
+            <input type="date" name="fecha" value="{{ filtro_fecha }}">
+            <button type="submit">Buscar</button>   
+        </form>
+    </section>
+<br>
+    <section>
+        <h2>Registros de Báscula</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Peso (Kg)</th>
+                    <th>Fecha y Hora</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros_bascula %}
+                <tr>
+                    <td>{{ registro.peso }}</td>
+                    <td>{{ registro.fecha_hora_local }}</td>
+                    <td>
+                        <button class="btn-editar" data-url="{% url 'editar_registro_bascula' registro.id %}" data-tipo="bascula">Editar</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="dato">No hay registros... ☠️</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+         <div>
+            {% if registros_bascula.has_previous %}
+                <a href="?page_bascula={{ registros_bascula.previous_page_number }}">Anterior</a>
+            {% endif %}
+            Página 1{{ registros_bascula_number }} de {{ registros_bascula.paginator.num_pages }}
+            {% if registros_bascula.has_next %}
+                <a href="?page_bascula={{ registros_bascula.next_page_number }}">Siguiente</a>
+            {% endif %}
+         </div>
+    </section>
+<br>
+    <section>
+        <h2>Registro de Otro Dispositivo</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Datos</th>
+                    <th>Fecha y Hora</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros_dispositivo %}
+                <tr>
+                    <td>{{ registro.datos }}</td>
+                    <td>{{ registro.fecha_hora_local }}</td>
+                    <td>
+                        <button class="btn-editar" data-url="{% url 'editar_registro_dispositivo' registro.id %}" data-tipo="dispositivo">Editar</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="dato">No hay registros... ☠️</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div>
+            {% if registros_dispositivo.has_previous %}
+                <a href="?page_dispositivo={{ registros_dispositivo.previous_page_number }}">Anterior</a>
+            {% endif %}
+            Página {{ registros_dispositivo.number }} de {{ registros_dispositivo.paginator.num_pages }}
+            {% if registros_dispositivo.has_next %}
+                <a href="?page_dispositivo={{ registros_dispositivo.next_page_number }}">Siguiente</a>
+            {% endif %}
+        </div>
+        
+    </section><br>
+
+    <!-- Modal para Editar Registro -->
+    <div id="modal-editar" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Editar Registro</h3>
+            <form method="post" id="editar-form">
+                {% csrf_token %}
+                <div id="campo-peso">
+                    <label for="peso">Peso (Kg):</label>
+                    <input type="text" id="peso" name="peso" value="" onfocus="selectText(this)">
+                </div>
+
+                <div id="campo-datos" style="display: none;">
+                    <label for="datos">Datos:</label>
+                    <input type="text" id="datos" name="datos" value="" onfocus="selectText(this)">
+                </div>
+
+                <label for="codigo_proveedor">Código de Proveedor:</label>
+                <input type="text" id="codigo_proveedor" name="codigo_proveedor" onfocus="selectText(this)">
+
+                <label for="proveedor">Proveedor:</label>
+                <input type="text" id="proveedor" name="proveedor" onfocus="selectText(this)">
+
+                <label for="producto">Producto:</label>
+                <input type="text" id="producto" name="producto" onfocus="selectText(this)">
+
+                <label for="lote">Lote:</label>
+                <input type="text" id="lote" name="lote" onfocus="selectText(this)">
+
+                <label for="fecha_vencimiento">Fecha de Vencimiento:</label>
+                <input type="date" id="fecha_vencimiento" name="fecha_vencimiento">
+
+                <button type="submit" class="btn-guardar">Guardar Cambios</button>
+                <button type="button" id="imprimir-btn" class="btn-imprimir">Imprimir</button>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        // Selección de texto en un campo
+        function selectText(element) {
+            element.select();
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById("modal-editar");
+            const closeBtn = document.querySelector(".close-btn");
+            const form = document.getElementById("editar-form");
+            const imprimirBtn = document.getElementById("imprimir-btn");
+            const searhInput = document.querySelector('input[name="q"]');
+
+            searhInput.addEventListener("input", function () {
+                const query = searhInput.value.toLowerCase();
+
+                const registroBascula = document.querySelectorAll(".registro-bascula tbody tr");
+                registroBascula.forEach(row => {
+                    const cells = Array.from(row.querySelectorAll("td"));
+                    const rowText = cells.map(cell => cell.textContent.toLowerCase()).join(" ");
+                    row.style.display = rowText.includes(query) ? "" : "none";
+                });
+
+                const registroDispositivo = document.querySelectorAll(".registro-dispositivo tbody tr");
+                registroDispositivo.forEach(row => {
+                    const cells = Array.from(row.querySelectorAll("td"));
+                    const rowText = cells.map(cell => cell.textContent.toLowerCase()).join(" ");
+                    row.style.display = rowText.includes(query) ? "" : "none";
+                })
+            })
+        
+            // Abrir el modal para editar
+            document.querySelectorAll(".btn-editar").forEach(button => {
+                button.addEventListener("click", function () {
+                    const url = this.getAttribute("data-url");
+                    const tipo = this.getAttribute("data-tipo");
+        
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("Error en la respuesta del servidor: " + response.status);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log("Datos recibidos del servidor:", data);
+        
+                            if (tipo === "bascula") {
+                                document.getElementById("campo-peso").style.display = "flex";
+                                document.getElementById("campo-datos").style.display = "none";
+                            } else if (tipo === "dispositivo") {
+                                document.getElementById("campo-peso").style.display = "none";
+                                document.getElementById("campo-datos").style.display = "flex";
+                            }
+        
+                            // Actualizar campos comunes
+                            document.getElementById("peso").value = data.peso || "";
+                            document.getElementById("fecha_vencimiento").value = data.fecha_vencimiento || "";
+                            document.getElementById("codigo_proveedor").value = data.codigo_proveedor || "";
+                            document.getElementById("proveedor").value = data.proveedor || "";
+                            document.getElementById("producto").value = data.producto || "";
+                            document.getElementById("lote").value = data.lote || "";
+                            document.getElementById("datos").value = data.datos || "";
+        
+                            // Establecer la acción del formulario
+                            form.action = url;
+                            modal.style.display = "flex";
+                        })
+                        .catch(error => {
+                            console.error("Error al cargar los datos del registro:", error);
+                            alert("No se pudieron cargar los datos.");
+                        });
+                });
+            });
+        
+            // Cerrar modal al hacer clic en la "x"
+            closeBtn.addEventListener("click", function () {
+                modal.style.display = "none";
+            });
+        
+            // Cerrar modal al hacer clic fuera de ella
+            window.addEventListener("click", function (event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        
+            // Guardar cambios desde el formulario del modal
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+        
+                fetch(form.action, {
+                    method: "POST",
+                    body: new FormData(form),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error en la respuesta del servidor: " + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.mensaje);
+                            modal.style.display = "none";
+                            location.reload();
+                        } else {
+                            alert("Errores: " + JSON.stringify(data.errors));
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al guardar los cambios:", error);
+                        alert("Hubo un error al guardar los cambios.");
+                    });
+            });
+        
+            // Enviar datos para imprimir desde el modal
+            imprimirBtn.addEventListener("click", function (event) {
+                event.preventDefault();
+            
+                const registroId = form.action.split("/").filter(Boolean).pop();
+                if (!registroId) {
+                    alert("No se pudo obtener el ID del registro para imprimir.");
+                    console.error("El ID del registro no está definido.");
+                    return;
+                }
+            
+                const formData = new FormData(form);
+                const data = {};
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+            
+                const tipo = document.getElementById("campo-peso").style.display !== "none" ? "bascula" : "dispositivo";
+            
+                fetch(`/imprimir/${tipo}/${registroId}/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error en la respuesta del servidor: " + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(responseData => {
+                        if (responseData.success) {
+                            alert("Datos Enviados:\n" + responseData.mensaje);
+                        } else {
+                            console.error("Error detallado:", responseData.mensaje);
+                            alert("Error al imprimir:\n" + responseData.mensaje);
+                        }
+                    })
+                    
+                    .catch(error => {
+                        console.error("Error en la solicitud:", error);
+                        alert("Hubo un error al imprimir.");
+                    });
+            });
+            
+        });
+
+
+               
+    </script>
+</body>
+</html>
