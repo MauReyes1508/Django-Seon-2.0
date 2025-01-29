@@ -245,7 +245,7 @@
                 <span class="close-button">&times;</span>
                 <h4>Se encontraron los siguientes errores:</h4>
                 <ul id="errorList">
-                    <!-- Los errores del formulario se insertarán dinámicamente aquí -->
+                    
                     {% if errors %}
                         {% for field in form %}
                             {% if field.errors %}
@@ -272,13 +272,9 @@
             <span id="cerrarModal" class="cerrar">&times;</span>
             <h2>Buscar Terceros</h2>
             
-            <!-- Barra de búsqueda -->
             <input type="text" id="barraBusqueda" class="barra-busqueda" placeholder="Buscar por nombre, código, etc." autocomplete="off" onfocus="selectText(this)">
-            
-            <!-- Botón de búsqueda -->
             <button id="btnBuscar" class="btn-buscar">Buscar</button>
-            
-            <!-- Tabla de resultados -->
+    
             <table id="resultadoBusqueda" class="tabla-resultados">
                 <thead>
                     <tr>
@@ -291,7 +287,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Los resultados de búsqueda -->
+            
                 </tbody>
             </table>
         </div>
@@ -337,7 +333,7 @@
                     tipnitField.appendChild(defaultOption);
         
                     // Opciones para Persona Natural o Jurídica
-                    if (tipoPersona === "0") { // Persona Natural
+                    if (tipoPersona === "0") {
                         const opcionesNatural = [
                             { value: "0", text: "Cédula de Ciudadanía" },
                             { value: "3", text: "Tarjeta de Identidad" },
@@ -350,18 +346,15 @@
                             optionElement.textContent = opcion.text;
                             tipnitField.appendChild(optionElement);
                         });
-                    } else if (tipoPersona === "1") { // Persona Jurídica
+                    } else if (tipoPersona === "1") { 
                         const optionElement = document.createElement("option");
                         optionElement.value = "1";
                         optionElement.textContent = "NIT";
                         tipnitField.appendChild(optionElement);
                     }
                 }
-        
-                // Evento de cambio en Tipo de Persona
+
                 tipperField.addEventListener("change", actualizarOpciones);
-        
-                // Establece las opciones predeterminadas al cargar la página
                 establecerSeleccionarPorDefecto();
                 actualizarOpciones();
             });
@@ -393,9 +386,7 @@
             
                 // Interceptar el envío del formulario
                 form.addEventListener("submit", function (event) {
-                    event.preventDefault(); // Evita el envío estándar del formulario
-            
-                    // Crear un objeto FormData con los datos del formulario
+                    event.preventDefault();
                     const formData = new FormData(form);
             
                     // Enviar los datos al servidor mediante fetch
@@ -417,13 +408,11 @@
                                     const li = document.createElement("li");
                                     li.style.marginBottom = "10px";
             
-                                    // Agrega el nombre del campo con formato
                                     const fieldLabel = document.createElement("strong");
                                     fieldLabel.textContent = `${form.elements[field]?.labels[0]?.textContent || field}:`;
                                     fieldLabel.style.color = "darkred";
                                     li.appendChild(fieldLabel);
             
-                                    // Agrega los mensajes de error
                                     const errorDiv = document.createElement("div");
                                     errorDiv.style.color = "red";
                                     errorDiv.style.marginTop = "5px";
@@ -446,8 +435,6 @@
                         });
                 });
             });
-            
-            
             
             // Función para cargar el último registro
             document.getElementById('loadLast').addEventListener('click', function () {
@@ -532,7 +519,6 @@
                                 }
                             });
 
-                            // Asegurarse de que los campos sean editables
                             document.getElementById('tercerosForm').elements.forEach(input => {
                                 input.disabled = false;
                             });
@@ -565,7 +551,6 @@
                 let query = document.getElementById("barraBusqueda").value;
             
                 if (query.trim() !== "") {
-                // Enviar solicitud AJAX para buscar los datos
                 $.ajax({
                     url: "{% url 'lista_terceros' %}",
                     data: { 'query': query },
@@ -598,11 +583,8 @@
                 }
             }
             $(document).ready(function() {
-        // Detectar cuando el usuario escribe en la barra de búsqueda
         $('#barraBusqueda').on('input', function() {
             let query = $(this).val();
-
-            // Realizar la búsqueda solo si hay texto
             if (query.length > 0) {
                 $.ajax({
                     url: '{% url "lista_terceros" %}', 
@@ -613,8 +595,6 @@
                     success: function(response) {
                         let resultados = response.resultados;
                         let html = '';
-
-                        // Si hay resultados, mostrar cada uno en la tabla
                         if (resultados.length > 0) {
                             resultados.forEach(function(tercero) {
                                 html += `
@@ -640,7 +620,6 @@
             }
         }); 
 
-        // Limpiar la barra de búsqueda cuando el usuario haga clic en la "x"
         $('#cerrarModal').on('click', function() {
             $('#barraBusqueda').val('');
             $('#resultadoBusqueda tbody').html('');

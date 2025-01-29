@@ -269,13 +269,9 @@
             <span id="cerrarModal" class="cerrar">&times;</span>
             <h2>Buscar Terceros</h2>
             {{ if }}
-            <!-- Barra de búsqueda -->
-            <input type="text" id="barraBusqueda" class="barra-busqueda" placeholder="Buscar por nombre, código, etc." autocomplete="off" onfocus="selectText(this)">
-            
-            <!-- Botón de búsqueda -->
+            <input type="text" id="barraBusqueda" class="barra-busqueda" placeholder="Buscar por nombre, código, etc." autocomplete="off" onfocus="selectText(this)">           
             <button id="btnBuscar" class="btn-buscar">Buscar</button>
             
-            <!-- Tabla de resultados -->
             <table id="resultadoBusqueda" class="tabla-resultados">
                 <thead>
                     <tr>
@@ -288,7 +284,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Los resultados de búsqueda -->
+                    
                 </tbody>
             </table>
         </div>
@@ -310,14 +306,14 @@
                 
                     // Agregar opciones dinámicas
                     let opciones = [];
-                    if (tipoPersona === "0") { // Persona Natural
+                    if (tipoPersona === "0") { 
                         opciones = [
                             { value: "0", text: "Cédula de Ciudadanía" },
                             { value: "3", text: "Tarjeta de Identidad" },
                             { value: "4", text: "Registro Civil" },
                             { value: "2", text: "Pasaporte" },
                         ];
-                    } else if (tipoPersona === "1") { // Persona Jurídica
+                    } else if (tipoPersona === "1") { 
                         opciones = [
                             { value: "1", text: "NIT" },
                         ];
@@ -325,7 +321,7 @@
                 
                     console.log("DEBUG: Opciones generadas:", opciones);
                 
-                    // Agregar opciones dinámicamente
+                    
                     opciones.forEach(opcion => {
                         const optionElement = document.createElement("option");
                         optionElement.value = opcion.value;
@@ -345,11 +341,11 @@
 
                 
         
-                // Inicializar las opciones al cargar la página
+                
                 tipnitField.setAttribute("data-initial-value", tipnitField.value);
                 actualizarOpciones();
         
-                // Actualizar opciones al cambiar el tipo de persona
+                
                 tipperField.addEventListener("change", actualizarOpciones);
             }
         });
@@ -365,12 +361,12 @@
                 const modal = document.getElementById('alertModal');
                 const closeButton = document.querySelector('.close-button');
         
-                // Mostrar el modal si hay errores
+                
                 {% if form.errors %}
                     modal.style.display = 'block';
                 {% endif %}
         
-                // Cerrar el modal al hacer clic en el botón de cerrar
+                
                 closeButton.addEventListener('click', function () {
                     modal.style.display = 'none';
                 });
@@ -383,7 +379,7 @@
                 });
             });
         
-                    // Obtener elementos del DOM
+                    
                     let modal = document.getElementById("miModal");     
                     let abrirModalBtn = document.getElementById("abrirModal");
                     let cerrarModalBtn = document.getElementById("cerrarModal");
@@ -406,7 +402,7 @@
                         let query = document.getElementById("barraBusqueda").value;
                     
                         if (query.trim() !== "") {
-                        // Enviar solicitud AJAX para buscar los datos
+                        
                         $.ajax({
                             url: "{% url 'lista_terceros' %}",
                             data: { 'query': query },
@@ -443,7 +439,7 @@
                 $('#barraBusqueda').on('input', function() {
                     let query = $(this).val();
         
-                    // Realizar la búsqueda solo si hay texto
+                    
                     if (query.length > 0) {
                         $.ajax({
                             url: '{% url "lista_terceros" %}', 
@@ -480,7 +476,7 @@
                     }
                 }); 
         
-                // Limpiar la barra de búsqueda cuando el usuario haga clic en la "x"
+                
                 $('#cerrarModal').on('click', function() {
                     $('#barraBusqueda').val('');
                     $('#resultadoBusqueda tbody').html('');

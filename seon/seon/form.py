@@ -65,13 +65,13 @@ class TerceroForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         TIPNIT_CHOICES = {
-            "0": [  # Persona Natural
+            "0": [  
                 (0, 'Cédula de Ciudadanía'),
                 (3, 'Tarjeta de Identidad'),
                 (4, 'Registro Civil'),
                 (2, 'Pasaporte'),
             ],
-            "1": [  # Persona Jurídica
+            "1": [  
                 (1, 'NIT'),
             ]
         }
@@ -105,7 +105,7 @@ class TerceroForm(forms.ModelForm):
         nitter = self.cleaned_data.get("nitter")
         tipper = self.cleaned_data.get("tipper")
 
-        if tipper == 1:  # Persona Jurídica
+        if tipper == 1: 
             try:
                 validar_nit(nitter, tipper)
             except ValidationError as e:
@@ -140,7 +140,6 @@ class TerceroForm(forms.ModelForm):
                 "La fecha de finalización no puede ser anterior a la fecha de inicio."
             )
 
-        # Validación de dirter si tipter es Cliente (0)
         if tipter == 0 and not dirter:
             self.add_error("dirter", "Debe ingresar una dirección para los clientes.")
 

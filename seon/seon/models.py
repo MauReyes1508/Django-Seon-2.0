@@ -32,7 +32,6 @@ from django.core.exceptions import ValidationError
 def validar_nit(nit, tipper):
     print(f"DEBUG: Iniciando validación de NIT. nit={nit}, tipper={tipper}")
     
-    # Validar solo para personas jurídicas
     if tipper != 1:
         print("DEBUG: No es persona jurídica, se omite validación de NIT.")
         return
@@ -57,7 +56,6 @@ def validar_nit(nit, tipper):
 
     print(f"DEBUG: Número principal: {numero}, Dígito de verificación: {digito_verificacion}")
 
-    # Validar que ambos valores sean numéricos
     if not numero.isdigit():
         raise ValidationError("El número principal del NIT debe contener solo dígitos.")
     if not digito_verificacion.isdigit():
@@ -65,11 +63,9 @@ def validar_nit(nit, tipper):
 
     digito_verificacion = int(digito_verificacion)
 
-    # Validar longitud del número principal
     if len(numero) < 8 or len(numero) > 14:
         raise ValidationError("El número principal del NIT debe tener entre 8 y 14 dígitos.")
 
-    # Calcular el dígito de verificación esperado
     primos = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71]
     suma = 0
     for i, digito in enumerate(reversed(numero)):
@@ -81,8 +77,6 @@ def validar_nit(nit, tipper):
     residuo = suma % 11
     digito_calculado = residuo if residuo <= 1 else 11 - residuo
     print(f"DEBUG: Residuo: {residuo}, Dígito calculado: {digito_calculado}")
-
-    # Validar si el dígito calculado coincide con el ingresado
     if digito_calculado != digito_verificacion:
         raise ValidationError("El dígito de verificación no corresponde al número principal del NIT.")
 
@@ -92,7 +86,6 @@ def validar_nit(nit, tipper):
 
 
 class Tercero(models.Model):
-    # Opciones para los campos de elección
     TIPPER_CHOICES = [
         (0, 'Natural'),
         (1, 'Jurídica'),
@@ -137,7 +130,6 @@ class Tercero(models.Model):
         (4, 'Publicidad'),
     ]
 
-    # Validaciones comunes
     PHONE_VALIDATOR = RegexValidator(
         regex=r'^\+?\d{9,15}$',
         message="El número de teléfono debe tener entre 9 y 15 dígitos y puede comenzar con '+'"
@@ -145,7 +137,6 @@ class Tercero(models.Model):
 
     def clean(self):
         super().clean()
-        # Validar si el usuario tiene permiso para editar el campo 'plazofac'
         if hasattr(self, '_editing_user'):
             user_profile = self._editing_user.profile
             if self.plazofac is not None and not user_profile.can_edit_plazofac():

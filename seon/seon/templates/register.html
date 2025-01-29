@@ -14,7 +14,6 @@
             <h1>Registro de Usuario</h1>
             <form method="post">
                 {% csrf_token %}
-                <!-- Primera fila -->
                 <p>
                     <label for="username">Usuario</label>
                     <input type="text" name="username" id="username">
@@ -40,7 +39,6 @@
                     <input type="number" name="cla_bodega" id="cla_bodega">
                 </p>
 
-                <!-- Segunda fila -->
                 <p>
                     <label for="caja">Caja</label>
                     <input type="number" name="caja" id="caja">
@@ -62,7 +60,6 @@
                     <input type="password" name="confirm_password" id="confirm_password">
                 </p>
 
-                <!-- Botón -->
                 <button type="submit">Registrar Usuario</button>
                 <a href="{% url 'login' %}"><button type="button">Login</button></a>
             </form>

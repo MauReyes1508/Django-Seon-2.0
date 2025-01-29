@@ -171,10 +171,8 @@ def remove_accents(input_str):
 def lista_terceros(request):
     query = request.GET.get('query', '').strip()
     if query:
-        # Normalizar el texto para eliminar tildes
         query_normalizada = remove_accents(query)
 
-        # Realizar la búsqueda (buscando en varios campos) con la versión normalizada
         resultados = Tercero.objects.filter(
             Q(nitter__icontains=query_normalizada) |
             Q(nomter__icontains=query_normalizada) | 
@@ -211,7 +209,6 @@ def editar_tercero(request, codter):
         print(f"DEBUG: POST data = {request.POST}")
         form = TerceroForm(request.POST, instance=tercero)
 
-        # Verificar choices en el momento de la validación
         print(f"DEBUG: Choices de tipnit antes de validar: {form.fields['tipnit'].choices}")
         print(f"DEBUG: Valor enviado para tipnit: {request.POST.get('tipnit')}")
 

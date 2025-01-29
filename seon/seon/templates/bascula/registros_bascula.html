@@ -32,9 +32,10 @@
 <br>
     <section>
         <h2>Registros de Báscula</h2>
-        <table>
+        <table class="registro-bascula">
             <thead>
                 <tr>
+                    <th>Seleccionar</th>
                     <th>Peso (Kg)</th>
                     <th>Fecha y Hora</th>
                     <th>Acción</th>
@@ -43,6 +44,9 @@
             <tbody>
                 {% for registro in registros_bascula %}
                 <tr>
+                    <td>
+                        <input type="checkbox" class="registro-checkbox" value="{{ registro.id }}">
+                    </td>
                     <td>{{ registro.peso }}</td>
                     <td>{{ registro.fecha_hora_local }}</td>
                     <td>
@@ -61,7 +65,7 @@
             {% if registros_bascula.has_previous %}
                 <a href="?page_bascula={{ registros_bascula.previous_page_number }}">Anterior</a>
             {% endif %}
-            Página 1{{ registros_bascula_number }} de {{ registros_bascula.paginator.num_pages }}
+            Página {{ registros_bascula.number }} de {{ registros_bascula.paginator.num_pages }}
             {% if registros_bascula.has_next %}
                 <a href="?page_bascula={{ registros_bascula.next_page_number }}">Siguiente</a>
             {% endif %}
@@ -70,9 +74,10 @@
 <br>
     <section>
         <h2>Registro de Otro Dispositivo</h2>
-        <table>
+        <table class="registro-dispositivo">
             <thead>
                 <tr>
+                    <th>Seleccionar</th>
                     <th>Datos</th>
                     <th>Fecha y Hora</th>
                     <th>Acción</th>
@@ -81,6 +86,9 @@
             <tbody>
                 {% for registro in registros_dispositivo %}
                 <tr>
+                    <td>
+                        <input type="checkbox" class="registro-checkbox" value="{{ registro.id }}">
+                    </td>
                     <td>{{ registro.datos }}</td>
                     <td>{{ registro.fecha_hora_local }}</td>
                     <td>
@@ -95,11 +103,15 @@
             </tbody>
         </table>
 
+        <button id="eliminar-btn" class="btn-eliminar">Eliminar Seleccionados</button>
+
         <div>
             {% if registros_dispositivo.has_previous %}
                 <a href="?page_dispositivo={{ registros_dispositivo.previous_page_number }}">Anterior</a>
             {% endif %}
             Página {{ registros_dispositivo.number }} de {{ registros_dispositivo.paginator.num_pages }}
+
+
             {% if registros_dispositivo.has_next %}
                 <a href="?page_dispositivo={{ registros_dispositivo.next_page_number }}">Siguiente</a>
             {% endif %}
@@ -158,6 +170,7 @@
             const form = document.getElementById("editar-form");
             const imprimirBtn = document.getElementById("imprimir-btn");
             const searhInput = document.querySelector('input[name="q"]');
+            const eliminarBtn = document.getElementById("btn-eliminar");
 
             searhInput.addEventListener("input", function () {
                 const query = searhInput.value.toLowerCase();
