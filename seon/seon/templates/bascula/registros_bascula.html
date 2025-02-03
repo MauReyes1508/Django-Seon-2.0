@@ -26,12 +26,16 @@
         <form method="get">
             <input type="text" name="q" placeholder="Buscar por peso, dato o fecha" value="{{ query }}" onfocus="selectText(this)">
             <input type="date" name="fecha" value="{{ filtro_fecha }}">
-            <button type="submit">Buscar</button>   
+            <button type="submit">Buscar 🔎</button>   
         </form>
     </section>
 <br>
     <section>
-        <h2>Registros de Báscula</h2>
+        <div class="encabezado-registro">
+            <h2>Registros de Báscula</h2>
+            <button id="eliminar-btn" class="btn-eliminar">Eliminar Seleccionados</button>
+        </div>
+
         <table class="registro-bascula">
             <thead>
                 <tr>
@@ -45,7 +49,7 @@
                 {% for registro in registros_bascula %}
                 <tr>
                     <td>
-                        <input type="checkbox" class="registro-checkbox" value="{{ registro.id }}">
+                        <input type="checkbox" class="registro-checkbox-bascula" value="{{ registro.id }}">
                     </td>
                     <td>{{ registro.peso }}</td>
                     <td>{{ registro.fecha_hora_local }}</td>
@@ -87,7 +91,7 @@
                 {% for registro in registros_dispositivo %}
                 <tr>
                     <td>
-                        <input type="checkbox" class="registro-checkbox" value="{{ registro.id }}">
+                        <input type="checkbox" class="registro-checkbox-dispositivo" value="{{ registro.id }}">
                     </td>
                     <td>{{ registro.datos }}</td>
                     <td>{{ registro.fecha_hora_local }}</td>
@@ -102,8 +106,6 @@
                 {% endfor %}
             </tbody>
         </table>
-
-        <button id="eliminar-btn" class="btn-eliminar">Eliminar Seleccionados</button>
 
         <div>
             {% if registros_dispositivo.has_previous %}
@@ -170,7 +172,7 @@
             const form = document.getElementById("editar-form");
             const imprimirBtn = document.getElementById("imprimir-btn");
             const searhInput = document.querySelector('input[name="q"]');
-            const eliminarBtn = document.getElementById("btn-eliminar");
+            const eliminarBtn = document.getElementById("eliminar-btn");
 
             searhInput.addEventListener("input", function () {
                 const query = searhInput.value.toLowerCase();
@@ -189,6 +191,52 @@
                     row.style.display = rowText.includes(query) ? "" : "none";
                 })
             })
+
+            // Función para eliminar
+
+            eliminarBtn.addEventListener("click", function () {
+                const checksBascula = document.querySelectorAll(".registro-checkbox-bascula:checked");
+                const checksDispositivo = document.querySelectorAll(".registro-checkbox-dispositivo:checked");
+
+                const idsBascula = Array.from(checksBascula).map(cb => cb.value);
+                const idsDispositivo = Array.from(checksDispositivo).map(cb => cb.value);
+
+                if (idsBascula.length === 0 && idsDispositivo.length === 0) {
+                    alert("Selecciona al menos un registro para eliminar. 😴");
+                    return;
+                }
+
+                if (!confirm("⚠️: Estás seuro de eliminar lo seleccionado?\n \nNOTA: Lo eliminado no es posible recuperar. 🤕")) {
+                    return;
+                }
+
+                fetch("{% url 'eliminar_registros' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({
+                        registros_bascula: idsBascula,
+                        registros_dispositivo: idsDispositivo
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.mensaje);
+                        location.reload();  
+                    }
+                    else {
+                        console.error("Error Al Eliminar", data.mensaje );
+                        alert("Error Al Eliminar" + data.mensaje);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error Al Eliminar", error);
+                    alert("Hubo un Error Para Eliminar Registro");
+                });
+            });
         
             // Abrir el modal para editar
             document.querySelectorAll(".btn-editar").forEach(button => {
@@ -323,10 +371,9 @@
                     });
             });
             
-        });
-
-
-               
+        });               
     </script>
 </body>
 </html>
+
+

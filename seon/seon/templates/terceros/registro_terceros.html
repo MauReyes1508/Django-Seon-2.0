@@ -24,7 +24,7 @@
                         <h1>IDENTIFICACIÓN</h1><br>
                         <div class="form-group">
                             <div>
-                                <label>Nombres:</label>
+                                <label>Nombres:</label> 
                                 {{ form.nomter }}
                             </div>
                             <div>
@@ -231,9 +231,9 @@
             </div>            
         </div><br><br>
         <div class="align-center">
-            <button id="abrirModal" type="button" class="abrir-modal">🔍</button>
+            <img id="abrirModal" class="btn-busqueda" src="{% static 'images/busqueda.png' %}">
             <button type="submit">Guardar</button>
-            <button type="reset">Limpiar</button>
+            <button type="reset" onclick="location.reload();">Limpiar</button>
             <button type="button" id="loadLast">Cargar Último Registro</button>
             <a href="{% url 'menu_rutinas' %}"><img class="btn-inicio" src="{% static 'images/btn-inicio.png' %}"></a>
         </div>

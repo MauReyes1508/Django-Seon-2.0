@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-)bq+)(zu@_26-@t%w98f*u#i&((wm$1a7k_%_h_e!sj)-7w=i#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "mantis-ultimate-man.ngrok-free.app"]
+ALLOWED_HOSTS = ["127.0.0.1", "wondrous-refined-earwig.ngrok-free.app"]
 
 
 # Application definition

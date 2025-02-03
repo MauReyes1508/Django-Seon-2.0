@@ -92,7 +92,7 @@ table tr:nth-child(even) {
 .modal-contenido {
   position: relative;
   background-color: #fff;
-  margin: 15% auto;
+  margin: 1% auto;  
   padding: 20px;
   border: 1px solid #888;
   max-width: 1000px;
@@ -144,6 +144,7 @@ table tr:nth-child(even) {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  min-width: 200px;
 }
 
 .tabla-resultados th,
@@ -209,4 +210,37 @@ table tr:nth-child(even) {
     to {
         opacity: 2;
     }
+}
+
+@media (max-width: 768) {
+  .modal-contenido {
+    width: 95%;
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .tabla-resultados {
+    min-width: 100%;
+  }
+
+  .barra-busqueda {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-contenido {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+  }
+
+  .tabla-container {
+    overflow-x: auto;
+  }
+
+  .tabla-resultados {
+    min-width: 500px;
+  }
+
 }

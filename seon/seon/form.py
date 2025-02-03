@@ -179,19 +179,20 @@ class TerceroForm(forms.ModelForm):
 class RegistroBasculaForm(forms.ModelForm):
     class Meta:
         model = RegistroBascula
+        exclude = ['fecha_hora_local']
         fields = ['peso', 'codigo_proveedor', 'proveedor', 'lote','producto', 'fecha_vencimiento' ]
         widgets = {
             'fecha_vencimiento': forms.DateInput(attrs={'type': 'date'}),
         }
-        exclude = ['fecha_hora_local']
 
 class RegistroDispositivoForm(forms.ModelForm):
     class Meta:
         model = RegistroDispositivo
+        exclude = ['fecha_hora_local']
         fields = ['datos', 'codigo_proveedor', 'proveedor', 'lote','producto', 'fecha_vencimiento']
         widgets = {
             'fecha_vencimiento': forms.DateInput(attrs={'type': 'date'}),
         }
-        exclude = ['fecha_hora_local']
+        
     
     

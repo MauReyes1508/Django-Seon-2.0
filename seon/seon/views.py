@@ -1,21 +1,23 @@
+import re
+import json
+import unicodedata
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils.timezone import localtime
+from django.utils.dateparse import parse_datetime
 from django.http import JsonResponse,HttpResponseForbidden
 from django.contrib import messages
 from django.db.models import Q
-from .form import UserRegistrationForm, RegistroBasculaForm, RegistroDispositivoForm
-import unicodedata
-import re
-import json
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
 
+from .form import UserRegistrationForm, RegistroBasculaForm, RegistroDispositivoForm
 from .models import Tercero
 from .models import RegistroBascula, RegistroDispositivo
 from .form import LoginForm, TerceroForm, UserRegistrationForm
 from .utils import leer_datos_desde_dispositivo, verificar_conexion_bascula, enviar_impresora
-from django.utils.timezone import localtime
-from django.utils.dateparse import parse_datetime
 
 ##########################################################################################################################################################################################################################################################################
 
@@ -201,7 +203,7 @@ def lista_terceros(request):
     return JsonResponse(data)
 
 
-
+@login_required
 def editar_tercero(request, codter):
     tercero = get_object_or_404(Tercero, codter=codter)
 
@@ -259,7 +261,7 @@ def eliminar_tercero(request, codter):
 ########################################// BÁSCULA \\##################################################################################################################################################################################################################################
 ##########################################################################################################################################################################################################################################################################
 
-
+@login_required
 def bascula_view(request):
     mensaje = None
     estado_conexion = None
@@ -341,8 +343,33 @@ def eliminar_dispositivo(request, id):
         messages.success(request, "Registro de dispositivo eliminado correctamente. ✅")
     return redirect('bascula_view')
 
+# Función para eliminar de la vista registro_bascula ############################################
+@csrf_exempt
+def eliminar_registros(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            ids_bascula = data.get("registros_bascula", [])
+            ids_dispositivo = data.get("registros_dispositivo", [])
+
+            if not ids_bascula and not ids_dispositivo:
+                return JsonResponse({"success": False, "mensaje": "No Se Enviaron Los Registros Para Eliminar"})
+            
+            if ids_bascula:
+                RegistroBascula.objects.filter(id__in=ids_bascula).delete()
+            if ids_dispositivo:
+                RegistroDispositivo.objects.filter(id__in=ids_dispositivo).delete()
+
+            return JsonResponse({"success": True, "mensaje": "Registros Eliminados. ✅"})
+        
+        except Exception as e:
+            return JsonResponse({"success": False, "mensaje": f"Error: {str(e)}"})
+        
+    return JsonResponse({"success": False, "mensaje": "Método No Valido."})
 
 # Función de búsqueda y vista de edición ##########################################################
+
+@login_required
 def registro_view(request):
     query = request.GET.get('q', '')
     filtro_fecha = request.GET.get('fecha', '')
@@ -385,23 +412,26 @@ def registro_view(request):
 
 # Función para editar ###############################################################################
 def editar_registro_bascula(request, id):
-    registro = get_object_or_404(RegistroBascula, id=id)
+    registro_actual = get_object_or_404(RegistroBascula, id=id)
 
     if request.method == "POST":
-        form = RegistroBasculaForm(request.POST, instance=registro)
+        form = RegistroBasculaForm(request.POST, instance=registro_actual)
         if form.is_valid():
+            registro_actual = RegistroBascula.objects.get(id=id)
+            form.instance.fecha_hora = registro_actual.fecha_hora_local
             form.save()
-            return JsonResponse({"success": True, "mensaje": "Registro actualizado correctamente"})
+
+            return JsonResponse({"success": True, "mensaje": "Registro actualizado correctamente 💫"})
         else:
             return JsonResponse({"success": False, "errors": form.errors})
 
     response_data = {
-        "peso": str(registro.peso) if registro.peso is not None else "0",
-        "fecha_vencimiento": registro.fecha_vencimiento.strftime("%Y-%m-%d") if registro.fecha_vencimiento else "",
-        "codigo_proveedor": registro.codigo_proveedor or "",
-        "proveedor": registro.proveedor or "",
-        "lote": registro.lote or "",
-        "producto": registro.producto or "",
+        "peso": str(registro_actual.peso) if registro_actual.peso is not None else "0",
+        "fecha_vencimiento": registro_actual.fecha_vencimiento.strftime("%Y-%m-%d") if registro_actual.fecha_vencimiento else "",
+        "codigo_proveedor": registro_actual.codigo_proveedor or "",
+        "proveedor": registro_actual.proveedor or "",
+        "lote": registro_actual.lote or "",
+        "producto": registro_actual.producto or "",
     }
 
     return JsonResponse(response_data)
@@ -409,23 +439,25 @@ def editar_registro_bascula(request, id):
 
 ####
 def editar_registro_dispositivo(request, id):
-    registro = get_object_or_404(RegistroDispositivo, id=id)
+    registro_actual = get_object_or_404(RegistroDispositivo, id=id)
 
     if request.method == "POST":
-        form = RegistroDispositivoForm(request.POST, instance=registro)
+        form = RegistroDispositivoForm(request.POST, instance=registro_actual)
         if form.is_valid():
+            registro_actual = RegistroDispositivo.objects.get(id=id)
+            form.instance.fecha_hora = registro_actual.fecha_hora_local
             form.save()
-            return JsonResponse({"success": True, "mensaje": "Registro actualizado correctamente"})
+            return JsonResponse({"success": True, "mensaje": "Registro actualizado correctamente ✨"})
         else:
             return JsonResponse({"success": False, "errors": form.errors})
 
     return JsonResponse({
-        "datos": registro.datos if registro.datos is not None else "0",
-        "fecha_vencimiento": registro.fecha_vencimiento.strftime("%Y-%m-%d") if registro.fecha_vencimiento else "",
-        "codigo_proveedor": registro.codigo_proveedor or "",
-        "proveedor": registro.proveedor or "",
-        "lote": registro.lote or "",
-        "producto": registro.producto or "",
+        "datos": registro_actual.datos if registro_actual.datos is not None else "0",
+        "fecha_vencimiento": registro_actual.fecha_vencimiento.strftime("%Y-%m-%d") if registro_actual.fecha_vencimiento else "",
+        "codigo_proveedor": registro_actual.codigo_proveedor or "",
+        "proveedor": registro_actual.proveedor or "",
+        "lote": registro_actual.lote or "",
+        "producto": registro_actual.producto or "",
     })
 
 

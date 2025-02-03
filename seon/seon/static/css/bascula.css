@@ -12,7 +12,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
 }
 
 .home-icon-container {
@@ -102,37 +102,71 @@ h1 {
 .tables-container {
     display: flex;
     flex-wrap: nowrap;
-    gap: 25px;
-    justify-content: space-between;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
 }
 
 .table-container {
-    overflow-x: auto;
-    max-width: 300%;
+    flex: 1;
+    min-width: 450px;
+    max-width: 600px; 
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.table-container h2 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    background-color: #ecf0f1;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 12px 16px 3px 0px rgba(0, 0, 0, 0.1); 
 }
 
-table, th, td {
-    border: 1px solid #ccc;
-    padding: 10px;
+th, td {
+    padding: 12px;
     text-align: center;
+    border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f7f9fa;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+
+tbody tr:hover {
+    background-color: #d9e6f2; 
+    transition: background-color 0.3s ease;
 }
 
 .dato {
-    cursor: default;
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 1rem;
 }
 
 .btn-leer {
-    padding: 10px 20px;
+    padding: 10px 40px;
     background-color: #2c3e50;
     color: white;
     border: none;
@@ -175,6 +209,7 @@ th {
 }
 
 .btn-eliminar{
+    background-color: transparent;
     border: none;
     font-weight: bold;
     cursor: pointer;
@@ -183,6 +218,7 @@ th {
 
 .btn-eliminar:hover {
     transform: scale(1.1);
+    background-color: transparent;
     color: red;
     border-bottom: 2px solid red;
     border-top: 2px solid red;
@@ -192,4 +228,85 @@ th {
     color: orange;
     border-bottom: 2px solid orange;
     border-top: 2px solid orange;
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: row;
+        text-align: center;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    .estado {
+        max-width: 90%;
+        font-size: 15px;
+        margin: 0 auto;
+    }
+
+    .tables-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .table-container {
+        width: 100%;
+        min-width: auto;    
+        max-width: 100%;
+
+    }
+
+    form {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    button {
+        width: 100%;
+        max-width: 300px;
+        margin-top: 5px;
+    }
+
+    .papel-icon {
+        display: flex;
+        justify-content: flex-start;
+        margin-left: 20px;
+    }
+
+    .mensaje-advertencia {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 1024px) {
+    header {
+        flex-direction: row;
+        text-align: center;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    .tables-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    form input[type="text"], form input[type="date"] {
+        width: 100%;
+        max-width: 300px;
+        font-size: 0.9rem;
+    }
+
+    button {
+        width: 100%;
+        max-width: 300px;
+        font-size: 0.9rem;
+    }
 }

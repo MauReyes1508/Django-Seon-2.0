@@ -7,8 +7,8 @@ body {
 
 .container {
     max-width: 1270px;
-    margin: -69px auto;
-    padding: -1px;
+    margin: -60px auto;
+    padding: 10px;
     background-color: white;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -170,14 +170,14 @@ textarea {
 
 button {
     display: inline-block;
-    margin: 10px 5px;
+    margin: 3px 5px;
     cursor: pointer;
     border: none;
 }
 
 .align-center {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .align-center button, 
@@ -219,32 +219,7 @@ button {
 
 .align-center .btn-danger:hover{
     background-color: #dc2626;
-}
-
-.align-center a button {
-    background-color: #555;
-}
-
-.align-center a button:hover {
-    background-color: #333;
-}
-
-.align-center .abrir-modal {
-    background-color: #555;
-}
-
-.align-center .abrir-modal:hover{
-    background-color: #333;
-}
-
-.align-center .btn-modal {
-    background-color: #555;
-}
-
-.align-center .btn-modal:hover{
-    background-color: #333;
-}
- 
+} 
 
 .row {
     display: flex;
@@ -278,6 +253,20 @@ input[type=number] {
     filter: drop-shadow(0 0 5px rgba(12, 12, 12, 0.974));
 }
 
+.btn-busqueda {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    top: 14px;
+    transition: 0.3s all ease;
+    cursor: pointer;
+}
+
+.btn-busqueda:hover{
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 5px rgba(12, 12, 12, 0.974));
+}
+
 .btn-back{
     width: 14px;
     height: 14px;
@@ -285,10 +274,135 @@ input[type=number] {
 }
 
 /* Diseño responsivo */
-@media (max-width: 700px) {
-    .financieros-grid,
-    .retenciones-grid {
-        grid-template-columns: 1fr;
+@media (max-width: 1024px) {
+    .financieros, .retenciones {
+        display: flex;
+        flex-direction: column;
+        width: 98%;
     }
+
+    .form-group > div {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .fecha {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .section-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    textarea {
+        width: 100%;
+    }
+
+    .fecha {
+        position: relative;
+        left: 10px;
+    }
+
+    .fecha2 {
+        position: relative;
+        left: 1px;
+    }
+
+    .descuento {
+        position: relative;
+        left: 1px;
+    }
+
+    .zona {
+        position: relative;
+        left: 1px;
+    }
+
+
+
 }
 
+@media (max-width: 768px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .form-group > div {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .align-center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .align-center .btn-danger {
+        width: 40%;
+        margin: 0 auto;
+    }
+
+    .btn-inicio, .btn-busqueda {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin: 0 auto;
+    }
+
+    textarea {
+        width: 100%;
+    }
+
+    .fecha2 {
+        position: relative;
+        left: 1px;
+    }
+
+    .fecha {
+        position: relative;
+        left: 30px;
+    }
+
+    .descuento {
+        position: relative;
+        left: 1px;
+    }
+
+    .zona {
+        position: relative;
+        left: 1px;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    .align-center button {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+
+    textarea {
+        width: 100%;
+    }
+}

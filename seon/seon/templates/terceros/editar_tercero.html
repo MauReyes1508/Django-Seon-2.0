@@ -235,9 +235,9 @@
             </div>            
         </div><br><br>
         <div class="align-center">
-            <button id="abrirModal" type="button" class="btn-modal">🔎</button>
+            <img id="abrirModal" class="btn-busqueda" src="{% static 'images/busqueda2.png' %}">
             <button type="submit" class="btn-primary">Guardar Cambios</button>
-            <a href="{% url 'registro_terceros' %}"><button type="button"><img class="btn-back" src="{% static 'images/hacia-atras.png' %}"></button></a>
+            <a href="{% url 'registro_terceros' %}" class="btn-backk"><button type="button"><img class="btn-back" src="{% static 'images/hacia-atras.png' %}"></button></a>
             <a href="#" onclick="eliminarTercero('{{ tercero.codter }}')" class="btn btn-danger">Eliminar</a>
         </div>
 
