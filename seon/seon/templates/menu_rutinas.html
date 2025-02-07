@@ -140,7 +140,7 @@
             modal.innerHTML = `
                 <div class="modal-overlay">
                     <div class="modal-content">
-                        <h2>Ingrese Su Contraseña</h2>
+                        <h2>Ingrese Su Contraseña de Usuario</h2>
                         <input type="password" id="claveInput" placeholder="Contraseña" autocomplete="current-password">
                         <div class="modal-buttons">
                             <button onclick="validarClave()">Ingresar</button>
@@ -177,7 +177,9 @@
                     window.location.href = "{% url 'register_user' %}";
                 }
                 else {
-                    alert("⛔ Acceso Denegado\n\n☠️ Contraseña Incorrecta o Permiso Requerido.");
+                    let mensaje = "⛔ Acceso Denegado\n\n";
+                    mensaje = data.error ? data.error : "No tienes permisos para acceder. ☠️";
+                    alert(mensaje);
                 }
                 cerrarModal();
             })

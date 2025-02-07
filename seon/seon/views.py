@@ -21,7 +21,7 @@ from .utils import clave_inicial, superuser, leer_datos_desde_dispositivo, verif
 ##########################################################################################################################################################################################################################################################################
 
 # Registro de un usuario
-@superuser
+@clave_inicial
 def register_user(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -65,22 +65,33 @@ def menu_rutinas(request):
     print("Usuario autenticado:", request.user.is_authenticated)
     return render(request, 'menu_rutinas.html', {'usuario': request.user})
 
-@clave_inicial
+@login_required
 def validar_clave(request):
     if request.method == "POST":
         data = json.loads(request.body)
         clave_ingresada = data.get("clave")
         user = request.user
-        if check_password(clave_ingresada, user.password):
-            if hasattr(user, "profile") and user.profile.clave_ini in ["ADM", "MHC"]:
-                return JsonResponse({"acceso": True})
-        return JsonResponse({"acceso": False})
+
+        print("Clave ingresada:", clave_ingresada)
+        print("Usuario autenticado:", user.username)
+        print("Contraseña correcta:", check_password(clave_ingresada, user.password))
+        print("Perfil existe:", hasattr(user, "profile"))
+        print("Clave inicial:", user.profile.clave_ini if hasattr(user, "profile") else "N/A")
+
+        if not check_password(clave_ingresada, user.password):
+            return JsonResponse({"acceso": False, "error": "Contraseña Incorrecta 🤕"})
+        if hasattr(user, "profile") and user.profile.clave_ini in ["ADM", "MHC"]:
+            return JsonResponse({"acceso": True})
+        return JsonResponse({"acceso": False})      
+    
+    return JsonResponse({"acceso": False, "error": "Método no permitido."}, status=405)
 
 
 @login_required
 def logout_view(request):
     logout(request)
     print(request.session.items())
+    request.session.flush()
     messages.success(request, "Has cerrado sesión exitosamente.")
     return redirect('login') 
 

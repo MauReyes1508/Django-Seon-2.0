@@ -25,10 +25,13 @@ def superuser(view_func):
     def _wrapped_view(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('login')
-        if not request.user.is_superuser:
-            return redirect('menu_rutinas')
-        return view_func(request, *args, **kwargs)
+        profile = getattr(request.user, 'profile', None)
+        if request.user.is_superuser or (profile and profile.clave_ini in ["ADM", "MHC"]):
+            return view_func(request, *args, **kwargs)
+
+        return redirect('menu_rutinas')
     return _wrapped_view
+
 
 ######################################################################################################################################################################################################################################################
 ############################################################// BÁSCULA \\##########################################################################################################################################################################################

@@ -156,8 +156,15 @@ STATICFILES_DIRS = [BASE_DIR / 'seon/static']
 LOGIN_REDIRECT_URL = '/menu_rutinas/'
 LOGIN_URL = '/login/'   
 
+# Duracion sesiones
+SESSION_COOKIE_AGE = 86400  # 1 día (en segundos)
+SESSION_SAVE_EVERY_REQUEST = True # Se refresca la sesion en cada request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Para evitar que la sesión expire al cerrar el navegador
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
