@@ -18,7 +18,7 @@
         </div>
         <div class="login-box"> 
             <h1>Iniciar Sesión</h1>
-            <form method="post">
+            <form method="post" onsubmit="load()">
                 {% csrf_token %}
                 <div>
                     {{ form.username.label_tag }}
@@ -33,10 +33,17 @@
                         {{ form.non_field_errors }}
                     </div>
                 {% endif %}
-                <button type="submit">INGRESAR</button>
+                <button type="submit" class="btn-login">INGRESAR</button>
             </form>
         </div>
     </div>
+
+    <script>
+        function load() {
+            const loginBtn = document.querySelector(".btn-login");
+            loginBtn.textContent = "INGRESANDO AL MENÚ..."
+        }
+    </script>
 </body>
 </html>
 

@@ -131,8 +131,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#AUTH_USER_MODEL = 'seon.Tercero'
-
 
 
 # Internationalization
@@ -156,6 +154,7 @@ STATICFILES_DIRS = [BASE_DIR / 'seon/static']
 
 
 LOGIN_REDIRECT_URL = '/menu_rutinas/'
+LOGIN_URL = '/login/'   
 
 
 # Default primary key field type

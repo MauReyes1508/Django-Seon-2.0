@@ -7,11 +7,25 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <link rel="website icon" type="icon" href="{% static 'images/Logo_Pacos.jpg' %}">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
 </head>
 <body>
     <header class="header">
         <div class="header-content">
-            <h1>Bienvenido: {{ user.username }}, A La Plataforma WEB de Seon</h1>
+            <img src="{% static 'images/menu.png' %}" alt="Menú" class="user-icon" id="openPanel">
+            
+            {% if user.is_authenticated %}
+                <h1 class="title">Bienvenido: {{ user.username }}, A La Plataforma WEB de Seon</h1>
+            {% else %}
+                <script>
+                    window.location.href = "{% url 'login' %}"
+                </script>
+            {% endif %}
+            
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <button class="logout-btn">
@@ -35,13 +49,48 @@
                 <a href="{% url 'bascula_view' %}"><button class="routine-btn">Ir</button></a>
             </div>
             <div class="routine-item">
-                <span>Rutina En Proceso</span>
-                <button class="routine-btn">Ir</button>
+                <span>Registrar Usuario</span>
+                <button class="routine-btn" onclick="verificar()">Ir</button>
             </div>
         </section>
     </main>
 
+    <!-- Panel de Usuario -->
+     <div id="userPanel" class="user-panel">
+        <div class="user-content">
+            <span class="close-btn" id="closeUser">&times;</span>
+            <h2>Datos</h2>
+            <form method="post" action="{% url 'editar_usu' %}">    
+                {% csrf_token %}
+                <label>Usuario:</label>
+                <input type="text" value="{{ user.username }}" readonly class="desactivados">
+
+                <label>Nombre:</label>
+                <input type="text" name="first_name" value="{{ user.first_name }}" placeholder="Ingresa Tú Nombre" onfocus="selectText(this)">
+
+                <label>Apellido:</label>
+                <input type="text" name="last_name" value="{{ user.last_name }}" placeholder="Ingresa Tú Apellido" onfocus="selectText(this)">
+
+                <label>Correo:</label>
+                <input type="email" name="email" value="{{ user.email }}" placeholder="Ingresa Un Correo" onfocus="selectText(this)">
+
+                {% if user.profile %}
+                    <label>Última Sesión:</label>
+                    <input type="text" value="{{ user.profile.last_login_local }}" readonly class="desactivados">
+                {% else %}
+                    <label>No Hay Última Sesión:</label>
+                    <input type="text" value="--/--/--" readonly class="desactivado-error">
+                {% endif %}
+  
+                <button type="submit" class="save-btn">Guardar Cambios</button>
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            </form>
+        </div>
+     </div>
+
     <script>
+
+        // Animación del botón de cerrar sesión
         const button = document.querySelector('.logout-btn');
         const text = button.querySelector('.text');
         const icon = button.querySelector('.icon');
@@ -56,6 +105,85 @@
         icon.style.opacity = 0;
         });
 
+        // Vetana Modal
+        const openPanel = document.getElementById("openPanel");
+        const closePanel = document.getElementById("closeUser");
+        const userPanel = document.getElementById("userPanel");
+
+        openPanel.addEventListener("click", () => {
+            userPanel.classList.add("active");
+        });
+
+        closePanel.addEventListener("click", () => {
+            userPanel.classList.remove("active");
+        });
+
+        document.addEventListener("click", (event) => {
+            if (!userPanel.contains(event.target) && event.target !== openPanel) {
+                userPanel.classList.remove("active");
+            }
+        });
+
+        // Función para seleccionar texto
+        function selectText(element) {
+            element.select();
+        }
+
+        // Método para no poder carga hacia atrás
+        window.history.pushState(null, "", window.location.href);
+        window.onpopstate = function() {
+            window.history.pushState(null, "", window.location.href);
+        };
+
+        function verificar() {
+            let modal = document.createElement("div");
+            modal.innerHTML = `
+                <div class="modal-overlay">
+                    <div class="modal-content">
+                        <h2>Ingrese Su Contraseña</h2>
+                        <input type="password" id="claveInput" placeholder="Contraseña" autocomplete="current-password">
+                        <div class="modal-buttons">
+                            <button onclick="validarClave()">Ingresar</button>
+                            <button onclick="cerrarModal()">Cerrar</button>    
+                        </div>
+                    </div>
+                </div>
+            `;
+            modal.classList.add("modal-container");
+            document.body.appendChild(modal);
+            setTimeout(() => document.getElementById("claveInput").focus(), 100);
+        }
+
+        function cerrarModal() {
+            document.querySelector(".modal-container").remove();
+        }
+
+        function validarClave() {
+            let clave = document.getElementById("claveInput").value;
+            if (clave.trim() === "") {
+                return;
+            }
+
+            fetch("{% url 'validar_clave' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({ "clave": clave })
+            })
+            .then(response => response.json()).then(data => {
+                if (data.acceso) {
+                    window.location.href = "{% url 'register_user' %}";
+                }
+                else {
+                    alert("⛔ Acceso Denegado\n\n☠️ Contraseña Incorrecta o Permiso Requerido.");
+                }
+                cerrarModal();
+            })
+            .catch(error => console.error("Error En La Solicitud:", error));
+        }
     </script>
 </body>
 </html>
+

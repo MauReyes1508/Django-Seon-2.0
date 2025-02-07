@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,59 +12,77 @@
     <div class="login-container">
         <div class="login-box">
             <h1>Registro de Usuario</h1>
-            <form method="post">
+            {% if messages %}
+                <div id="message-container">
+                    {% for message in messages %}
+                        <div class="alert 
+                            {% if message.tags == 'success' %}alert-success
+                            {% elif message.tags == 'warning' %}alert-warning
+                            {% else %}alert-error{% endif %}">
+                            {{ message }}
+                            <span class="close-btn" onclick="this.parentElement.style.display='none'">&times;</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <form method="post" id="register-form" onsubmit="disableSubmit()">
+
                 {% csrf_token %}
-                <p>
-                    <label for="username">Usuario</label>
-                    <input type="text" name="username" id="username">
-                </p>
-                <p>
-                    <label for="first_name">Nombre</label>
-                    <input type="text" name="first_name" id="first_name">
-                </p>
-                <p>
-                    <label for="last_name">Apellido</label>
-                    <input type="text" name="last_name" id="last_name">
-                </p>
-                <p>
-                    <label for="clave_ini">Clave Inicial</label>
-                    <select name="ini_cl" id="clave_ini">
-                        <option value="">---------</option>
-                        <option value="0">ADM</option>
-                        <option value="1">MHC</option>
-                    </select>
-                </p>
-                <p>
-                    <label for="cla_bodega">Clave Bodega</label>
-                    <input type="number" name="cla_bodega" id="cla_bodega">
-                </p>
+                {{ form.as_p }}
 
-                <p>
-                    <label for="caja">Caja</label>
-                    <input type="number" name="caja" id="caja">
-                </p>
-                <p>
-                    <label for="turno">Turno</label>
-                    <input type="number" name="turno" id="turno">
-                </p>
-                <p>
-                    <label for="fectur">Fecha de Turno</label>
-                    <input type="date" name="fectur" id="fectur">
-                </p>
-                <p>
-                    <label for="password">Contraseña</label>
-                    <input type="password" name="password" id="password">
-                </p>
-                <p>
-                    <label for="confirm_password">Confirmar Contraseña</label>
-                    <input type="password" name="confirm_password" id="confirm_password">
-                </p>
-
-                <button type="submit">Registrar Usuario</button>
-                <a href="{% url 'login' %}"><button type="button">Login</button></a>
+                <div class="button-container">
+                    <button type="submit" class="save-btn">Registrar Usuario</button>
+                    <button type="button" id="clear-form" class="btn-clear">Limpiar Campos</button>
+                    <a href="{% url 'login' %}"><button class="login-btn" type="button">
+                        <span class="text">Login</span>
+                        <span class="icon" aria-hidden="true">
+                        <img src="{% static 'images/avatar.png' %}" alt="Login">
+                        </span>
+                </button></a> 
+                </div> 
             </form>
-        </div>
-    </div>
+                
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let alerts = document.querySelectorAll(".alert");
+
+            alerts.forEach(function(alert) {
+                let hideTimeout;
+
+                function startHide() {
+                    hideTimeout = setTimeout(() => {
+                        alert.style.opacity = "0";
+                        alert.style.transform = "translateY(-20px)";
+                        setTimeout(() => {alert.style.display = "none";}, 500);
+                    }, 5000);
+                }
+                startHide();
+                alert.addEventListener("mouseenter", function () {
+                    clearTimeout(hideTimeout);
+                    alert.style.opacity = "1";
+                });
+                alert.addEventListener("mouseleave", function () {
+                    startHide();
+                });
+                let closeBtn = alert.querySelector(".close-btn");
+                closeBtn.addEventListener("click", function () {
+                    alert.style.opacity = "0";
+                    alert.style.transform = "translateX(-20px)";
+                    setTimeout(() => {alert.style.display = "none";}, 500);
+                });
+            });
+            // Función para limpiar
+            document.getElementById("clear-form").addEventListener("click", function() {
+                document.getElementById("register-form").reset();
+            });
+        });
+
+        // Función para evitar que se reenvie el formulario
+        function disableSubmit() {
+            const submitBtn = document.querySelector(".save-btn");
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Registrando...";
+        }
+    </script>
 </body>
 </html>
-

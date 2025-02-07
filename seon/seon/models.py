@@ -4,13 +4,15 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.utils.timezone import now, localtime, is_naive, make_aware, utc
 
+import pytz
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     clave_ini = models.CharField(max_length=3, choices=[('ADM', 'ADM'), ('MHC', 'MHC')], verbose_name="Clave Inicial")
     cla_bodega = models.PositiveIntegerField(verbose_name="Clave Bodega", null=True, blank=True)
     caja = models.PositiveIntegerField(verbose_name="Caja", null=True, blank=True)
     turno = models.PositiveIntegerField(verbose_name="Turno", null=True, blank=True)
-    fectur = models.DateField(verbose_name="Fecha de Turno", null=True, blank=True)
+    fectur = models.DateField(verbose_name="Fecha de Turno", null=True, blank=True) 
 
     def __str__(self):
         return self.user.username
@@ -18,6 +20,15 @@ class UserProfile(models.Model):
     def can_edit_plazofac(self):
         return self.clave_ini in ['ADM', 'MHC']
 
+    @property 
+    def last_login_local(self):
+        if self.user.last_login:
+            bogota_tz = pytz.timezone('America/Bogota')
+            last_login = self.user.last_login
+            if is_naive(last_login):
+                last_login = make_aware(last_login, timezone=utc)
+            return localtime(last_login, bogota_tz)
+        return None
 
 #########################################################################################################################################################################################################################################################################################
 
@@ -344,6 +355,7 @@ class RegistroBascula(models.Model):
         db_table = 'registro_bascula'
         verbose_name = 'Registro de Báscula'
         verbose_name_plural = 'Registros de Báscula'
+        managed = False
         
 
 
@@ -369,6 +381,7 @@ class RegistroDispositivo(models.Model):
     class Meta:
         db_table = 'registro_dispositivo'
         verbose_name = 'Registro de Dispositivo'
-        verbose_name_plural = 'Registros de Dispositivo'     
+        verbose_name_plural = 'Registros de Dispositivo'
+        managed = False    
         
 

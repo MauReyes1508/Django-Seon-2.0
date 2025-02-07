@@ -1,25 +1,56 @@
 from django import forms
-from .models import Tercero, validar_nit
+from .models import Tercero, validar_nit, RegistroBascula, RegistroDispositivo, UserProfile
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
-from .models import RegistroBascula, RegistroDispositivo
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
-    confirm_password = forms.CharField(widget=forms.PasswordInput())
+    email = forms.EmailField(required=False, label="Correo Electrónico")
+    clave_ini = forms.ChoiceField(choices=[('', 'Sin Clave'), ('ADM', 'ADM'), ('MHC', 'MHC')], label="Clave Inicial", required=False)
+    cla_bodega = forms.IntegerField(required=False, label="Clave Bodega")
+    caja = forms.IntegerField(required=False, label="Caja") 
+    turno = forms.IntegerField(required=False, label="Turno")
+    fectur = forms.DateField(required=False, label="Fecha de Turno", widget=forms.DateInput(attrs={'type': 'date'}))
+    password = forms.CharField(widget=forms.PasswordInput(), label="Contraseña")
+    confirm_password = forms.CharField(widget=forms.PasswordInput(), label="Confirmar Contraseña")
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
+        fields = ['username', 'first_name', 'last_name', 'email'] 
 
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password and confirm_password and password != confirm_password:
+            raise ValidationError("La Contraseñas No Coinciden.")
+        
+        return cleaned_data
+    
+    
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password"])
+        user.is_active = True
+        user.is_staff = True
+        user.is_superusuario = True
+
         if commit:
             user.save()
+            UserProfile.objects.create(
+                user=user,
+                clave_ini=self.cleaned_data["clave_ini"],
+                cla_bodega=self.cleaned_data.get("cla_bodega"),
+                caja=self.cleaned_data.get("caja"),
+                turno=self.cleaned_data.get("turno"),
+                fectur=self.cleaned_data.get("fectur"),
+            )
+
         return user
+    
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
@@ -42,6 +73,10 @@ class LoginForm(AuthenticationForm):
             if not user.is_active:
                 raise forms.ValidationError("El usuario está inactivo.")
         return cleaned_data
+    
+##########################################################################################################################################################################################################################################################################
+##################################################################// TERCEROS \\####################################################################################################################################################################################################
+##########################################################################################################################################################################################################################################################################
 
 class TerceroForm(forms.ModelForm):
     codter = forms.IntegerField(

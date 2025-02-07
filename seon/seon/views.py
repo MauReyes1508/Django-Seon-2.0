@@ -3,33 +3,39 @@ import json
 import unicodedata
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.utils.timezone import localtime
-from django.utils.dateparse import parse_datetime
-from django.http import JsonResponse,HttpResponseForbidden
+from django.http import JsonResponse
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.hashers import check_password
 
 from .form import UserRegistrationForm, RegistroBasculaForm, RegistroDispositivoForm
 from .models import Tercero
 from .models import RegistroBascula, RegistroDispositivo
 from .form import LoginForm, TerceroForm, UserRegistrationForm
-from .utils import leer_datos_desde_dispositivo, verificar_conexion_bascula, enviar_impresora
+from .utils import clave_inicial, superuser, leer_datos_desde_dispositivo, verificar_conexion_bascula, enviar_impresora
 
 ##########################################################################################################################################################################################################################################################################
 
 # Registro de un usuario
-@user_passes_test(lambda u: u.is_superuser)
+@superuser
 def register_user(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Usuario registrado exitosamente.")
-            return redirect('login')
+            return redirect('register_user')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    if field == '__all__':
+                        messages.error(request, f"Error: {error}")
+                    else:
+                        messages.error(request, f"{form.fields[field].label}: {error}")
     else:
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
@@ -37,7 +43,10 @@ def register_user(request):
 
 # Verificación de creedenciales e inicio de sesión
 def login_view(request):
-    if request.method == "POST":
+    if request.user.is_authenticated:
+        return redirect('menu_rutinas')
+
+    if request.method == "POST":    
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
@@ -51,10 +60,21 @@ def login_view(request):
     return render(request, 'login.html', {'form': form})
 
 
-
 @login_required
 def menu_rutinas(request):
+    print("Usuario autenticado:", request.user.is_authenticated)
     return render(request, 'menu_rutinas.html', {'usuario': request.user})
+
+@clave_inicial
+def validar_clave(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        clave_ingresada = data.get("clave")
+        user = request.user
+        if check_password(clave_ingresada, user.password):
+            if hasattr(user, "profile") and user.profile.clave_ini in ["ADM", "MHC"]:
+                return JsonResponse({"acceso": True})
+        return JsonResponse({"acceso": False})
 
 
 @login_required
@@ -63,6 +83,19 @@ def logout_view(request):
     print(request.session.items())
     messages.success(request, "Has cerrado sesión exitosamente.")
     return redirect('login') 
+
+@login_required
+def editar_usu(request):
+    if request.method == "POST":
+        user = request.user
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        user.email = request.POST.get('email', user.email)
+        user.save()
+        return redirect('menu_rutinas')
+
+    return render(request, 'menu_rutinas.html')
+
 
 ##########################################################################################################################################################################################################################################################################
 ############################################// REGISTRO DE TERCEROS \\#############################################################################################################################################################################################################################################################################################################################################################

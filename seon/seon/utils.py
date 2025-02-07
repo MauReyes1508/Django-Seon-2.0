@@ -1,6 +1,38 @@
-import serial 
+import serial #type: ignore
 import re
 import time
+
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from functools import wraps
+
+#########################################################\\ USUARIOS //#############################################################################################################################################################################################
+
+def clave_inicial(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        
+        profile = getattr(request.user, 'profile', None)
+        if profile and profile.clave_ini in ["ADM", "MHC"]:
+            return view_func(request, *args, **kwargs)
+        return redirect('menu_rutinas')
+    return _wrapped_view
+
+def superuser(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        if not request.user.is_superuser:
+            return redirect('menu_rutinas')
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+
+######################################################################################################################################################################################################################################################
+############################################################// BÁSCULA \\##########################################################################################################################################################################################
+######################################################################################################################################################################################################################################################
 
 def verificar_conexion_bascula(puerto='/dev/ttyUSB0', baudrate=9600, timeout=1):
     try:
@@ -80,4 +112,8 @@ def enviar_impresora(peso, fecha_hora, lote, producto, codigo_proveedor, proveed
 
     except Exception as e:
         return {"success": False, "error": f"Error: {str(e)}"}
+    
+
+
+    
 

@@ -28,12 +28,30 @@ body {
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
 }
 
 .header h1 {
     margin: 0;
     font-size: 24px;
     cursor: default;
+}
+
+.header-title {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.user-icon {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.user-icon:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 5px rgb(116, 68, 54));
 }
 
 /* Botón de cerrar sesión */
@@ -144,4 +162,137 @@ body {
 
 .routine-btn:hover {
     background-color: #d84315;
+}
+
+/* Ventana de usuario */
+.user-panel {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 280px;
+  height: 100%;
+  background: linear-gradient(135deg, #ffcc80, #ffab40);
+  box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  border-radius: 0 10px 10px 0;
+}
+
+.user-panel.active {
+  left: 0;
+}
+
+.user-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #6d4c41;
+  font-size: 1rem;
+}
+
+.user-panel h2 {
+  font-size: 18px;
+  text-align: center;
+  border-bottom: 2px solid white;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.user-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-content label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #6d4c41;
+}
+
+.user-content input {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+}
+
+.user-content input[readonly] {
+  background-color: #e2e8f0;
+  cursor: not-allowed;
+  font-weight: bold;
+}
+
+.save-btn {
+  padding: 8px 15px;
+  font-size: 14px;
+  color: white;
+  background-color: #ff6f00;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.save-btn:hover {
+  background-color: #d84315;  
+}
+
+
+.close-btn {
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+  align-self: flex-end;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #6d4c41;
+}
+
+/* VENTANA DE VERIFICACIÓN */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-buttons {
+  margin-top: 15px;
+}
+
+.modal-buttons button {
+  margin: 5px;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-buttons button:first-child {
+  background-color: green;
+  color: white;
+}
+
+.modal-buttons button:last-child {
+  background-color: red;
+  color: white;
 }

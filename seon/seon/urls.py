@@ -5,10 +5,12 @@ from . import views
 urlpatterns = [
     ################################// USUARIOS \\#########################################################
     path('admin/', admin.site.urls),
-    path('register/', views.register_user, name='register_user'),
     path('', views.login_view, name='login'),
+    path('register/', views.register_user, name='register_user'),
+    path('validar_clave', views.validar_clave, name='validar_clave'),
     path('logout/', views.logout_view, name='logout'),
     path('menu_rutinas/', views.menu_rutinas, name='menu_rutinas'),
+    path('editar_usu', views.editar_usu, name="editar_usu"),
     ################################// REGISTRO DE TERCEROS \\#########################################################
     path('registro_terceros/', views.registro_terceros, name='registro_terceros'),
     path('lista_terceros/', views.lista_terceros, name='lista_terceros'),
