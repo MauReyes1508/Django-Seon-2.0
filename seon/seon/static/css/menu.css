@@ -263,17 +263,69 @@ body {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
 .modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #ffcc80, #ffb74d);
+  padding: 25px;
+  border-radius: 12px;
   text-align: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  width: 350px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content h2 {
+  font-size: 20px;
+  color: #6d4c41;
+  margin-bottom: 15px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #d6a680;
+  background-color: #fff;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.modal-content input:focus {
+  border-color: #ff6f00;
 }
 
 .modal-buttons {
@@ -281,18 +333,33 @@ body {
 }
 
 .modal-buttons button {
+  flex: 1;
   margin: 5px;
-  padding: 8px 12px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .modal-buttons button:first-child {
-  background-color: green;
+  background-color: #4caf50;
   color: white;
 }
 
+.modal-buttons button:first-child:hover {
+  background-color: #388e3c;
+  transform: scale(1.05);
+}
+
 .modal-buttons button:last-child {
-  background-color: red;
+  background-color: #e53935;
   color: white;
+}
+
+.modal-buttons button:last-child:hover {
+  background-color: #c62828;
+  transform: scale(1.05);
 }

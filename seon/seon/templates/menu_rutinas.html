@@ -138,9 +138,9 @@
         function verificar() {
             let modal = document.createElement("div");
             modal.innerHTML = `
-                <div class="modal-overlay">
+                <div class="modal-overlay active">
                     <div class="modal-content">
-                        <h2>Ingrese Su Contraseña de Usuario</h2>
+                        <h2>Ingrese Su Contraseña</h2>
                         <input type="password" id="claveInput" placeholder="Contraseña" autocomplete="current-password">
                         <div class="modal-buttons">
                             <button onclick="validarClave()">Ingresar</button>
@@ -155,7 +155,11 @@
         }
 
         function cerrarModal() {
-            document.querySelector(".modal-container").remove();
+            let modalOverlay = document.querySelector(".modal-overlay");
+            if (modalOverlay) {
+                modalOverlay.classList.remove("active");
+                setTimeout(() => modalOverlay.parentElement.remove(), 300);
+            }
         }
 
         function validarClave() {
